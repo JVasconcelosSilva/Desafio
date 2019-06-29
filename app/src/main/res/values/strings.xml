@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Desafio</string>
+    <string name="txtTitle">DESAFIO</string>
+    <string name="btnLista">LISTA DE FILMES</string>
+    <string name="btnHome">VOLTAR</string>
+    <string name="txtTitleLista">LISTA DE FILMES</string>
+</resources>
