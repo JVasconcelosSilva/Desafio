@@ -5,10 +5,18 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ListView
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 class ActivityLista : AppCompatActivity(), View.OnClickListener {
+
+    lateinit var listView : ListView
+    lateinit var movieAdapter : ArrayAdapter<String>
+    var movies = mutableListOf<String>()
 
     override fun onClick(v: View?) {
         finish()
@@ -18,28 +26,26 @@ class ActivityLista : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista)
 
-        val rvLista = findViewById(R.id.RvLista) as RecyclerView
-        rvLista.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
+        //val rvLista = findViewById(R.id.RvLista) as RecyclerView
+        //rvLista.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
 
-        val items = ArrayList<ServiceType>()
+        listView = ListView(this)
+        setContentView(listView)
+        movieAdapter = ArrayAdapter(this,
+            android.R.layout.simple_list_item_1, movies)
+        listView.adapter = movieAdapter
 
-        // O App para de funcionar a partir desta linha
-        val json = downloadJSON()
-        val list = getServicesFromGSON(json)
-
-        for (item in list)
-        {
-            items.add(ServiceType(item.id, item.movie, item.year))
-        }
-
-        // adicionar os itens diretamente funciona (REMOVER DEPOIS)
-        //items.add(ServiceType("2","filme2", "2009"))
-        //items.add(ServiceType("3","filme3", "2010"))
-
-        val adapter = FilmesLista(items)
-        rvLista.adapter = adapter
+        val api = Api()
+        api.loadMovies()?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe ({ movie ->
+            movies.add("${movie.id} -- ${movie.movie}  -- ${movie.year}")
+        }, { e ->
+            e.printStackTrace()
+        },{
+            movieAdapter.notifyDataSetChanged()
+        })
 
         val btnHome = findViewById<Button>(R.id.btnHome)
         btnHome.setOnClickListener(this)
     }
 }
+
