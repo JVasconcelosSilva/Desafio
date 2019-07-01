@@ -17,8 +17,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var btnLista = findViewById<Button>(R.id.btnLista)
-
+        val btnLista = findViewById<Button>(R.id.btnLista)
         btnLista.setOnClickListener(this)
     }
 }

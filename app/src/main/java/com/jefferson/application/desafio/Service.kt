@@ -1,3 +1,3 @@
 package com.jefferson.application.desafio
 
-data class ServiceType (var id: Int, var name: String, var value: Double)
+data class ServiceType(var id: String, var movie: String, var year: String)
