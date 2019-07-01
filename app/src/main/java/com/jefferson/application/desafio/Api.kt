@@ -21,20 +21,17 @@ class Api {
         val gson = GsonBuilder().create()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.myjson.com/bins/1881fz")
+            .baseUrl("https://api.myjson.com/bins/")
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(httpClient.build())
             .build()
 
-        service = retrofit.create<ApiDef>(ApiDef::class.java)
+        service = retrofit.create(ApiDef::class.java)
     }
 
     fun loadMovies(): Observable<Movie>? {
-        return service.listMovies()
-            .flatMap { filmResults -> Observable.from(filmResults.results) }
-            .map { film ->
-                Movie(film.id, film.movie, film.year)
+        return service.listMovies().flatMap{ filmResults -> Observable.from(filmResults.results)}.map { film -> Movie(film.id, film.movie, film.year)
             }
     }
 }

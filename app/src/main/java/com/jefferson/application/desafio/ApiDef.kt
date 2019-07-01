@@ -4,7 +4,6 @@ import retrofit2.http.GET
 import rx.Observable
 
 interface ApiDef {
-    @GET("films")
+    @GET("19i6sb")
     fun listMovies() : Observable<FilmResult>
-
 }
